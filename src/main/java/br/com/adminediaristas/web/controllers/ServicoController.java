@@ -23,6 +23,14 @@ public class ServicoController {
         return IconeEnum.values();
     }
 
+    @GetMapping
+    public ModelAndView buscarTotos() {
+        var modelAndView = new ModelAndView("admin/servico/lista");
+        modelAndView.addObject("servicos", repository.findAll());
+
+        return modelAndView;
+    }
+
     @GetMapping("/cadastrar")
     public ModelAndView cadastrar() {
         var modelAndView = new ModelAndView("admin/servico/form");
@@ -35,6 +43,6 @@ public class ServicoController {
     public String cadastrar(Servico servico) {
         repository.save(servico);
 
-        return "redirect:/admin/servicos/cadastrar";
+        return "redirect:/admin/servicos";
     }
 }
