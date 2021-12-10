@@ -3,10 +3,14 @@ package br.com.adminediaristas.web.controllers;
 import br.com.adminediaristas.core.enums.IconeEnum;
 import br.com.adminediaristas.core.models.Servico;
 import br.com.adminediaristas.core.repositories.ServicoRepository;
+import br.com.adminediaristas.web.dtos.ServicoFormDTO;
+import br.com.adminediaristas.web.mappers.WebServicoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/admin/servicos")
@@ -14,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class ServicoController {
 
     private final ServicoRepository repository;
+    private final WebServicoMapper mapper;
 
     @ModelAttribute("icones")
     public IconeEnum[] getIcones() {
@@ -31,13 +36,14 @@ public class ServicoController {
     @GetMapping("/cadastrar")
     public ModelAndView cadastrar() {
         var modelAndView = new ModelAndView("admin/servico/form");
-        modelAndView.addObject("servico", new Servico());
+        modelAndView.addObject("form", new ServicoFormDTO());
 
         return modelAndView;
     }
 
     @PostMapping("/cadastrar")
-    public String cadastrar(Servico servico) {
+    public String cadastrar(@Valid ServicoFormDTO form) {
+        var servico = mapper.toModel(form);
         repository.save(servico);
 
         return "redirect:/admin/servicos";
@@ -46,13 +52,19 @@ public class ServicoController {
     @GetMapping("/{id}/editar")
     public ModelAndView editar(@PathVariable Long id) {
         var modelAndView = new ModelAndView("admin/servico/form");
-        modelAndView.addObject("servico", repository.getById(id));
+        var servico = repository.getById(id);
+        var form = mapper.toForm(servico);
+
+        modelAndView.addObject("form", form);
 
         return modelAndView;
     }
 
     @PostMapping("/{id}/editar")
-    public String editar(@PathVariable Long id, Servico servico) {
+    public String editar(@PathVariable Long id, @Valid ServicoFormDTO form) {
+        var servico = mapper.toModel(form);
+        servico.setId(id);
+
         repository.save(servico);
 
         return "redirect:/admin/servicos";
