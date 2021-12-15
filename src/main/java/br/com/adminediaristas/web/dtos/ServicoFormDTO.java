@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.NumberFormat;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
@@ -21,6 +22,7 @@ public class ServicoFormDTO {
 
     @NotNull
     @PositiveOrZero
+    @NumberFormat(style = NumberFormat.Style.CURRENCY, pattern = "#,##0.00")
     private BigDecimal valorMinimo;
 
     @NotNull
@@ -30,6 +32,7 @@ public class ServicoFormDTO {
     @NotNull
     @PositiveOrZero
     @Max(100)
+    @NumberFormat(style = NumberFormat.Style.CURRENCY, pattern = "#,##0.00")
     private BigDecimal porcentagemComissao;
 
     @NotNull
@@ -38,6 +41,7 @@ public class ServicoFormDTO {
 
     @NotNull
     @PositiveOrZero
+    @NumberFormat(style = NumberFormat.Style.CURRENCY, pattern = "#,##0.00")
     private BigDecimal valorQuarto;
 
     @NotNull
@@ -46,6 +50,7 @@ public class ServicoFormDTO {
 
     @NotNull
     @PositiveOrZero
+    @NumberFormat(style = NumberFormat.Style.CURRENCY, pattern = "#,##0.00")
     private BigDecimal valorSala;
 
     @NotNull
@@ -54,6 +59,7 @@ public class ServicoFormDTO {
 
     @NotNull
     @PositiveOrZero
+    @NumberFormat(style = NumberFormat.Style.CURRENCY, pattern = "#,##0.00")
     private BigDecimal valorBanheiro;
 
     @NotNull
@@ -62,6 +68,7 @@ public class ServicoFormDTO {
 
     @NotNull
     @PositiveOrZero
+    @NumberFormat(style = NumberFormat.Style.CURRENCY, pattern = "#,##0.00")
     private BigDecimal valorCozinha;
 
     @NotNull
@@ -70,6 +77,7 @@ public class ServicoFormDTO {
 
     @NotNull
     @PositiveOrZero
+    @NumberFormat(style = NumberFormat.Style.CURRENCY, pattern = "#,##0.00")
     private BigDecimal valorQuintal;
 
     @NotNull
@@ -78,6 +86,7 @@ public class ServicoFormDTO {
 
     @NotNull
     @PositiveOrZero
+    @NumberFormat(style = NumberFormat.Style.CURRENCY, pattern = "#,##0.00")
     private BigDecimal valorOutros;
 
     @NotNull
