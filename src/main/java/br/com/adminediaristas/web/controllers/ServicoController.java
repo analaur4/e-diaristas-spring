@@ -1,9 +1,8 @@
 package br.com.adminediaristas.web.controllers;
 
 import br.com.adminediaristas.core.enums.IconeEnum;
-import br.com.adminediaristas.core.repositories.ServicoRepository;
 import br.com.adminediaristas.web.dtos.ServicoFormDTO;
-import br.com.adminediaristas.web.mappers.WebServicoMapper;
+import br.com.adminediaristas.web.services.WebServicoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -17,8 +16,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class ServicoController {
 
-    private final ServicoRepository repository;
-    private final WebServicoMapper mapper;
+    private final WebServicoService service;
 
     @ModelAttribute("icones")
     public IconeEnum[] getIcones() {
@@ -28,7 +26,7 @@ public class ServicoController {
     @GetMapping
     public ModelAndView buscarTotos() {
         var modelAndView = new ModelAndView("admin/servico/lista");
-        modelAndView.addObject("servicos", repository.findAll());
+        modelAndView.addObject("servicos", service.buscarTodos());
 
         return modelAndView;
     }
@@ -47,8 +45,7 @@ public class ServicoController {
             return "/admin/servico/form";
         }
 
-        var servico = mapper.toModel(form);
-        repository.save(servico);
+        service.cadastrar(form);
 
         return "redirect:/admin/servicos";
     }
@@ -56,10 +53,8 @@ public class ServicoController {
     @GetMapping("/{id}/editar")
     public ModelAndView editar(@PathVariable Long id) {
         var modelAndView = new ModelAndView("admin/servico/form");
-        var servico = repository.getById(id);
-        var form = mapper.toForm(servico);
 
-        modelAndView.addObject("form", form);
+        modelAndView.addObject("form", service.buscarPorId(id));
 
         return modelAndView;
     }
@@ -69,17 +64,15 @@ public class ServicoController {
         if(result.hasErrors()) {
             return "admin/servico/form";
         }
-        var servico = mapper.toModel(form);
-        servico.setId(id);
 
-        repository.save(servico);
+        service.editar(form, id);
 
         return "redirect:/admin/servicos";
     }
 
     @GetMapping("/{id}/excluir")
     public String excluir(@PathVariable Long id) {
-        repository.deleteById(id);
+        service.excluirPorId(id);
 
         return "redirect:/admin/servicos";
     }
