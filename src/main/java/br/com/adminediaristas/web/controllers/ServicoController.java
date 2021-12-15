@@ -1,12 +1,12 @@
 package br.com.adminediaristas.web.controllers;
 
 import br.com.adminediaristas.core.enums.IconeEnum;
-import br.com.adminediaristas.core.models.Servico;
 import br.com.adminediaristas.core.repositories.ServicoRepository;
 import br.com.adminediaristas.web.dtos.ServicoFormDTO;
 import br.com.adminediaristas.web.mappers.WebServicoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -42,7 +42,11 @@ public class ServicoController {
     }
 
     @PostMapping("/cadastrar")
-    public String cadastrar(@Valid ServicoFormDTO form) {
+    public String cadastrar(@Valid @ModelAttribute("form") ServicoFormDTO form, BindingResult result) {
+        if(result.hasErrors()) {
+            return "/admin/servico/form";
+        }
+
         var servico = mapper.toModel(form);
         repository.save(servico);
 
@@ -61,7 +65,10 @@ public class ServicoController {
     }
 
     @PostMapping("/{id}/editar")
-    public String editar(@PathVariable Long id, @Valid ServicoFormDTO form) {
+    public String editar(@PathVariable Long id, @Valid @ModelAttribute("form") ServicoFormDTO form, BindingResult result) {
+        if(result.hasErrors()) {
+            return "admin/servico/form";
+        }
         var servico = mapper.toModel(form);
         servico.setId(id);
 
