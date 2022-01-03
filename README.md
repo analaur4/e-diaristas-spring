@@ -1,6 +1,6 @@
 # Projeto E-Diaristas
 
-Projeto desenvolvido durante a imersão Multi Stack da [TreinaWeb](http://treinaweb.com.br) utilizando Java e Spring Boot.
+Projeto desenvolvido durante a imersão MultiStack da [TreinaWeb](http://treinaweb.com.br) utilizando Java e Spring Boot.
 
 ## Dependências do Projeto
 
@@ -12,7 +12,7 @@ Projeto desenvolvido durante a imersão Multi Stack da [TreinaWeb](http://treina
 
 ## Dependências de Desenvolvimento
 
-- Spring Boot DevTols
+- Spring Boot Devtools
 - Lombok
 
 ## Requisitos
