@@ -1,6 +1,7 @@
 package br.com.adminediaristas.web.services;
 
 import br.com.adminediaristas.core.enums.TipoUsuarioEnum;
+import br.com.adminediaristas.core.exceptions.UsuarioNotFoundException;
 import br.com.adminediaristas.core.models.Usuario;
 import br.com.adminediaristas.core.repositories.UsuarioRepository;
 import br.com.adminediaristas.web.dtos.UsuarioCadastroFormDTO;
@@ -28,4 +29,17 @@ public class WebUsuarioService {
 
         return repository.save(model);
     }
+
+    public Usuario buscarPorId(Long id) {
+        var mensagem = String.format("Usuário com ID %d não encontrado", id);
+
+        return repository.findById(id)
+                .orElseThrow(() -> new UsuarioNotFoundException(mensagem));
+    }
+
+    public void excluirPorId(Long id) {
+        var usuario = buscarPorId(id);
+        repository.delete(usuario);
+    }
+
 }
