@@ -1,5 +1,6 @@
 package br.com.adminediaristas.web.controllers;
 
+import br.com.adminediaristas.web.dtos.UsuarioCadastroFormDTO;
 import br.com.adminediaristas.web.services.WebUsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,14 @@ public class UsuarioController {
     public ModelAndView buscarTodos() {
         var modelAndView = new ModelAndView("admin/usuario/lista");
         modelAndView.addObject("usuarios", service.buscarTodos());
+
+        return modelAndView;
+    }
+
+    @GetMapping("/cadastrar")
+    public ModelAndView cadastrar() {
+        var modelAndView = new ModelAndView("admin/usuario/cadastro-form");
+        modelAndView.addObject("cadastroForm", new UsuarioCadastroFormDTO());
 
         return modelAndView;
     }
