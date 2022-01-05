@@ -10,6 +10,7 @@ import br.com.adminediaristas.web.dtos.UsuarioCadastroFormDTO;
 import br.com.adminediaristas.web.dtos.UsuarioEdicaoFormDTO;
 import br.com.adminediaristas.web.mappers.WebUsuarioMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.FieldError;
 
@@ -21,6 +22,7 @@ public class WebUsuarioService {
 
     private final UsuarioRepository repository;
     private final WebUsuarioMapper mapper;
+    private final PasswordEncoder passwordEncoder;
 
     public List<Usuario> buscarTodos() {
         return repository.findAll();
@@ -38,9 +40,13 @@ public class WebUsuarioService {
         }
 
         var model = mapper.toModel(form);
-        validarCamposUnicos(model);
 
+        var senhaHash = passwordEncoder.encode(model.getSenha());
+
+        model.setSenha(senhaHash);
         model.setTipoUsuario(TipoUsuarioEnum.ADMIN);
+
+        validarCamposUnicos(model);
 
         return repository.save(model);
     }
