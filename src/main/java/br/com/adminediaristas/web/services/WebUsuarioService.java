@@ -2,6 +2,7 @@ package br.com.adminediaristas.web.services;
 
 import br.com.adminediaristas.core.enums.TipoUsuarioEnum;
 import br.com.adminediaristas.core.exceptions.SenhasNaoConferemException;
+import br.com.adminediaristas.core.exceptions.UsuarioJaCadastradoException;
 import br.com.adminediaristas.core.exceptions.UsuarioNotFoundException;
 import br.com.adminediaristas.core.models.Usuario;
 import br.com.adminediaristas.core.repositories.UsuarioRepository;
@@ -37,6 +38,7 @@ public class WebUsuarioService {
         }
 
         var model = mapper.toModel(form);
+        validarCamposUnicos(model);
 
         model.setTipoUsuario(TipoUsuarioEnum.ADMIN);
 
@@ -59,10 +61,12 @@ public class WebUsuarioService {
     public Usuario editar(UsuarioEdicaoFormDTO form, Long id) {
         var usuario = buscarPorId(id);
 
+
         var model = mapper.toModel(form);
         model.setId(usuario.getId());
         model.setSenha(usuario.getSenha());
         model.setTipoUsuario(usuario.getTipoUsuario());
+        validarCamposUnicos(model);
 
         return repository.save(model);
     }
@@ -70,6 +74,17 @@ public class WebUsuarioService {
     public void excluirPorId(Long id) {
         var usuario = buscarPorId(id);
         repository.delete(usuario);
+    }
+
+    private void validarCamposUnicos(Usuario usuario) {
+        repository.findByEmail(usuario.getEmail()).ifPresent((usuarioEncontrado) -> {
+            if(!usuarioEncontrado.equals(usuario)) {
+                var mensagem = "Já existe um usuário cadastrado com esse e-mail";
+                var fieldError = new FieldError(usuario.getClass().getName(), "email", usuario.getEmail(), false, null, null, mensagem);
+
+                throw new UsuarioJaCadastradoException(mensagem, fieldError);
+            }
+        });
     }
 
 }
