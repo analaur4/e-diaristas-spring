@@ -2,6 +2,7 @@ package br.com.adminediaristas.web.controllers;
 
 import br.com.adminediaristas.web.dtos.FlashMessageDTO;
 import br.com.adminediaristas.web.dtos.UsuarioCadastroFormDTO;
+import br.com.adminediaristas.web.dtos.UsuarioEdicaoFormDTO;
 import br.com.adminediaristas.web.services.WebUsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -55,6 +56,20 @@ public class UsuarioController {
         modelAndView.addObject("edicaoForm", service.buscarFormPorId(id));
 
         return modelAndView;
+    }
+
+    @PostMapping("/{id}/editar")
+    public String editar(@PathVariable Long id,
+                         @Valid @ModelAttribute("edicaoForm")UsuarioEdicaoFormDTO edicaoForm,
+                         BindingResult result,
+                         RedirectAttributes attrs) {
+        if(result.hasErrors()) {
+            return "admin/usuario/edicao-form";
+        }
+
+        service.editar(edicaoForm, id);
+        attrs.addFlashAttribute("alert", new FlashMessageDTO("alert-success", "Usuário editado com sucesso!"));
+        return "redirect:/admin/usuarios";
     }
 
     @GetMapping("/{id}/excluir")
