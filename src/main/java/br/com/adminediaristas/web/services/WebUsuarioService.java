@@ -1,6 +1,7 @@
 package br.com.adminediaristas.web.services;
 
 import br.com.adminediaristas.core.enums.TipoUsuarioEnum;
+import br.com.adminediaristas.core.exceptions.SenhasNaoConferemException;
 import br.com.adminediaristas.core.exceptions.UsuarioNotFoundException;
 import br.com.adminediaristas.core.models.Usuario;
 import br.com.adminediaristas.core.repositories.UsuarioRepository;
@@ -9,6 +10,7 @@ import br.com.adminediaristas.web.dtos.UsuarioEdicaoFormDTO;
 import br.com.adminediaristas.web.mappers.WebUsuarioMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.FieldError;
 
 import java.util.List;
 
@@ -24,6 +26,16 @@ public class WebUsuarioService {
     }
 
     public Usuario cadastrar(UsuarioCadastroFormDTO form) {
+        var senha = form.getSenha();
+        var confirmacaoSenha = form.getConfirmacaoSenha();
+
+        if(!senha.equals(confirmacaoSenha)) {
+            var mensagem = "Os dois campos de senha não conferem";
+            var fieldError = new FieldError(form.getClass().getName(), "confirmacaoSenha", form.getConfirmacaoSenha(), false, null, null, mensagem);
+
+            throw new SenhasNaoConferemException(mensagem, fieldError);
+        }
+
         var model = mapper.toModel(form);
 
         model.setTipoUsuario(TipoUsuarioEnum.ADMIN);

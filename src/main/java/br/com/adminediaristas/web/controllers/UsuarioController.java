@@ -1,5 +1,6 @@
 package br.com.adminediaristas.web.controllers;
 
+import br.com.adminediaristas.core.exceptions.SenhasNaoConferemException;
 import br.com.adminediaristas.web.dtos.FlashMessageDTO;
 import br.com.adminediaristas.web.dtos.UsuarioCadastroFormDTO;
 import br.com.adminediaristas.web.dtos.UsuarioEdicaoFormDTO;
@@ -44,8 +45,13 @@ public class UsuarioController {
             return "admin/usuario/cadastro-form";
         }
 
-        service.cadastrar(cadastroForm);
-        attrs.addFlashAttribute("alert", new FlashMessageDTO("alert-success", "Usuário cadastrado com sucesso!"));
+        try {
+            service.cadastrar(cadastroForm);
+            attrs.addFlashAttribute("alert", new FlashMessageDTO("alert-success", "Usuário cadastrado com sucesso!"));
+        } catch (SenhasNaoConferemException e) {
+            result.addError(e.getFieldError());
+            return "admin/usuario/cadastro-form";
+        }
 
         return "redirect:/admin/usuarios";
     }
