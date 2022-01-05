@@ -77,14 +77,12 @@ public class WebUsuarioService {
     }
 
     private void validarCamposUnicos(Usuario usuario) {
-        repository.findByEmail(usuario.getEmail()).ifPresent((usuarioEncontrado) -> {
-            if(!usuarioEncontrado.equals(usuario)) {
+        if(repository.isEmailJaCadastrado(usuario.getEmail(), usuario.getId())) {
                 var mensagem = "Já existe um usuário cadastrado com esse e-mail";
                 var fieldError = new FieldError(usuario.getClass().getName(), "email", usuario.getEmail(), false, null, null, mensagem);
 
                 throw new UsuarioJaCadastradoException(mensagem, fieldError);
-            }
-        });
+        }
     }
 
 }
