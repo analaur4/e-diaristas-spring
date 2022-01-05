@@ -5,6 +5,7 @@ import br.com.adminediaristas.core.exceptions.UsuarioNotFoundException;
 import br.com.adminediaristas.core.models.Usuario;
 import br.com.adminediaristas.core.repositories.UsuarioRepository;
 import br.com.adminediaristas.web.dtos.UsuarioCadastroFormDTO;
+import br.com.adminediaristas.web.dtos.UsuarioEdicaoFormDTO;
 import br.com.adminediaristas.web.mappers.WebUsuarioMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,12 @@ public class WebUsuarioService {
 
         return repository.findById(id)
                 .orElseThrow(() -> new UsuarioNotFoundException(mensagem));
+    }
+
+    public UsuarioEdicaoFormDTO buscarFormPorId(Long id) {
+        var usuario = buscarPorId(id);
+
+        return mapper.toForm(usuario);
     }
 
     public void excluirPorId(Long id) {
