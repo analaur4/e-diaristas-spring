@@ -1,6 +1,7 @@
 package br.com.adminediaristas.web.controllers;
 
 import br.com.adminediaristas.core.exceptions.ValidacaoException;
+import br.com.adminediaristas.web.dtos.AlterarSenhaFormDTO;
 import br.com.adminediaristas.web.dtos.FlashMessageDTO;
 import br.com.adminediaristas.web.dtos.UsuarioCadastroFormDTO;
 import br.com.adminediaristas.web.dtos.UsuarioEdicaoFormDTO;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/admin/usuarios")
@@ -92,5 +94,34 @@ public class UsuarioController {
         attrs.addFlashAttribute("alert", new FlashMessageDTO("alert-success", "Usuário excluído com sucesso!"));
 
         return "redirect:/admin/usuarios";
+    }
+
+    @GetMapping("/alterar-senha")
+    public ModelAndView alterarSenha() {
+        var modelAndView = new ModelAndView("admin/usuario/alterar-senha");
+        modelAndView.addObject("alterarSenhaForm", new AlterarSenhaFormDTO());
+
+        return modelAndView;
+    }
+
+    @PostMapping("/alterar-senha")
+    public String alterarSenha(@Valid @ModelAttribute("alterarSenhaForm") AlterarSenhaFormDTO alterarSenhaForm,
+                               BindingResult result,
+                               RedirectAttributes attrs,
+                               Principal principal) {
+        if(result.hasErrors()) {
+            return "/admin/usuario/alterar-senha";
+        }
+
+        try {
+            service.alterarSenha(alterarSenhaForm, principal.getName());
+            attrs.addFlashAttribute("alert", new FlashMessageDTO("alert-success", "Senha alterada com sucesso"));
+
+        } catch (ValidacaoException e) {
+            result.addError(e.getFieldError());
+            return "/admin/usuario/alterar-senha";
+        }
+
+        return "redirect:/admin/usuarios/alterar-senha";
     }
 }

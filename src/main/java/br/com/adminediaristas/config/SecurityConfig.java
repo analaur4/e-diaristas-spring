@@ -46,7 +46,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/admin/servicos")
                 .permitAll();
 
-        http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/admin/logout", "GET"));
+        http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/admin/logout", "GET"))
+                .logoutSuccessUrl("/admin/login");
 
         http.rememberMe()
                 .tokenValiditySeconds(rememberMeValiditySeconds)
