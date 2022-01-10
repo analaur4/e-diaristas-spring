@@ -32,7 +32,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("admin/**").hasAuthority(TipoUsuarioEnum.ADMIN.toString())
                 .anyRequest().authenticated();
 
-        http.formLogin();
+        http.formLogin()
+            .loginPage("/admin/login")
+            .usernameParameter("email")
+            .passwordParameter("senha")
+                .defaultSuccessUrl("/admin/servicos")
+            .permitAll();
 
         http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/admin/logout", "GET"));
     }
