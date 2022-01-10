@@ -1,5 +1,6 @@
 package br.com.adminediaristas.web.dtos;
 
+import br.com.adminediaristas.web.interfaces.IConfirmacaoSenha;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +15,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UsuarioCadastroFormDTO {
+public class UsuarioCadastroFormDTO implements IConfirmacaoSenha {
 
     @NotNull
     @Size(min = 3, max = 255)

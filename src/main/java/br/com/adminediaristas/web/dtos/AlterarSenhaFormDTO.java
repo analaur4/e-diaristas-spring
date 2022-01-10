@@ -1,5 +1,6 @@
 package br.com.adminediaristas.web.dtos;
 
+import br.com.adminediaristas.web.interfaces.IConfirmacaoSenha;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AlterarSenhaFormDTO {
+public class AlterarSenhaFormDTO implements IConfirmacaoSenha {
 
     @NotNull
     @NotEmpty
