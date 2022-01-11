@@ -9,7 +9,7 @@ CREATE TABLE `servico` (
    `icone` varchar(14) NOT NULL,
    `nome` varchar(50) NOT NULL,
    `posicao` int NOT NULL,
-   `procentagem_comissao` decimal(19,2) NOT NULL,
+   `porcentagem_comissao` decimal(19,2) NOT NULL,
    `qtd_horas` int NOT NULL,
    `valor_banheiro` decimal(19,2) NOT NULL,
    `valor_cozinha` decimal(19,2) NOT NULL,
