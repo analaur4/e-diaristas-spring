@@ -4,6 +4,7 @@ import br.com.adminediaristas.core.models.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
@@ -12,4 +13,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     @Query("SELECT count(*) > 0 FROM Usuario u WHERE u.email = :email AND (:id IS NULL OR u.id != :id)")
     Boolean isEmailJaCadastrado(String email, Long id);
+
+    List<Usuario> findByCidadesAtendidasCodigoIbge(String codigoIbge);
 }
