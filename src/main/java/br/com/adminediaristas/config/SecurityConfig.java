@@ -54,6 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .tokenValiditySeconds(rememberMeValiditySeconds)
                 .key(rememberMeKey)
                 .rememberMeParameter("lembrar-me");
+
+        http.cors();
     }
 
     @Override
